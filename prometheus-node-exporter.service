@@ -1,0 +1,10 @@
+[Unit]
+Description=Prometheus Node Exporter
+
+[Service]
+User=prometheus
+EnvironmentFile=/etc/default/prometheus-node-exporter
+ExecStart=/usr/sbin/node_exporter $OPTIONS
+
+[Install]
+WantedBy=multi-user.target
