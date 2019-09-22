@@ -10,6 +10,7 @@ before_install:
 - sudo apt-get install -y libsystemd-dev
 - echo 'aaaaaaaa' > passphrase_file
 - echo $DEBSIGN | base64 -d | gpg --import --batch
+- bundle -v
 - bundle install
 
 script:
@@ -18,4 +19,5 @@ script:
 deploy:
   skip_cleanup: true
   provider: script
-  script: rvm use 2.6.3 do (bundle install && bundle exec deb-s3 upload --s3-region=eu-west-1 --sign=6A2561804E290210909454E69640EFFBAA3B94A5 --gpg-options="\-\-pinentry\-mode=loopback \-\-passphrase\-file passphrase_file \-\-batch" --suite stable --origin "Andrew Rowson" --bucket apt-growse-com promtail_*.deb)
+  script: bundle -v 
+  #bundle install && bundle exec deb-s3 upload --s3-region=eu-west-1 --sign=6A2561804E290210909454E69640EFFBAA3B94A5 --gpg-options="\-\-pinentry\-mode=loopback \-\-passphrase\-file passphrase_file \-\-batch" --suite stable --origin "Andrew Rowson" --bucket apt-growse-com promtail_*.deb)
