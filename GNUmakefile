@@ -23,6 +23,9 @@ CC_FOR_LINUX_ARM := arm-linux-gnueabi-gcc
 .PHONY: package
 package: $(addsuffix .deb, $(addprefix $(DEBNAME)_$(DEBVERSION)_, $(foreach a, $(ARCH), $(a))))
 
+.PHONY: build
+build: $(addprefix $(APPHOME)/dist/$(DEBNAME)_linux_, $(foreach a, $(ARCH), $(a)))
+
 .PHONY: checkout
 checkout: $(APPHOME)
 
