@@ -1,6 +1,9 @@
-# Promtail package
+# Prometheus node exporter - deb package
 
-[![Build Status](https://travis-ci.org/growse/promtail-package.svg?branch=master)](https://travis-ci.org/growse/promtail-package)
+I needed a deb file for the Prometheus node exporter binary, so I made this. Result gets put onto apt.growse.com.
 
-I needed a deb file for Grafana's Loki Promtail, so I made a pipeline. Result gets put onto apt.growse.com.
+   deb http://apt.growse.com/ stable main
+
+More details are available on https://apt.growse.com/
+
 

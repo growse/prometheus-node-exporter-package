@@ -1,4 +1,4 @@
-name: Build, package and deploy
+name: CI
 on: [push]
 
 jobs:
@@ -36,5 +36,5 @@ jobs:
         run: |
           echo 'aaaaaaaa' > passphrase_file
           echo $DEBSIGN | base64 -d | gpg --import --batch
-          bundle exec deb-s3 upload --s3-region=eu-west-1 --sign=6A2561804E290210909454E69640EFFBAA3B94A5 --gpg-options="\-\-pinentry\-mode=loopback \-\-passphrase\-file passphrase_file \-\-batch" --suite stable --origin "Andrew Rowson" --bucket apt-growse-com *.deb
+          bundle exec deb-s3 upload --s3-region=eu-west-1 --sign=6A2561804E290210909454E69640EFFBAA3B94A5 --gpg-options="\-\-pinentry\-mode=loopback \-\-passphrase\-file passphrase_file \-\-batch" --suite stable --origin "Andrew Rowson" --bucket apt.growse.com *.deb
 
