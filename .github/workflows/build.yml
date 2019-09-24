@@ -7,6 +7,10 @@ jobs:
     name: Build
     runs-on: ubuntu-latest
     steps:
+      - name: Get Build number
+        uses: einaregilsson/build-number@v1
+        with:
+          token: ${{secrets.github_token}}
       - name: Set up Go 1.13
         uses: actions/setup-go@v1
         with:

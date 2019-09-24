@@ -6,8 +6,8 @@ APPURL := https://github.com/prometheus/node_exporter
 ARCH := amd64 arm
 
 # Setup
-TRAVIS_BUILD_NUMBER ?= 0
-DEBVERSION := $(VERSION:v%=%)-$(TRAVIS_BUILD_NUMBER)
+BUILD_NUMBER ?= 0
+DEBVERSION := $(VERSION:v%=%)-$(BUILD_NUMBER)
 GOPATH := $(abspath gopath)
 APPHOME := $(GOPATH)/src/$(APP_REMOTE)
 
