@@ -21,4 +21,4 @@ script:
 deploy:
   skip_cleanup: true
   provider: script
-  script: rvm use $(rvm list strings | sort | head -n1) do gem install bundler && rvm use $(rvm list strings | sort | head -n1) do bundle install && rvm use $(rvm list strings | sort | head -n1) do bundle exec exec deb-s3 upload --s3-region=eu-west-1 --sign=6A2561804E290210909454E69640EFFBAA3B94A5 --gpg-options="\-\-pinentry\-mode=loopback \-\-passphrase\-file passphrase_file \-\-batch" --suite stable --origin "Andrew Rowson" --bucket apt-growse-com promtail_*.deb
+  script: rvm use $(rvm list strings | sort | head -n1) do gem install bundler && rvm use $(rvm list strings | sort | head -n1) do bundle install && rvm use $(rvm list strings | sort | head -n1) do bundle exec deb-s3 upload --s3-region=eu-west-1 --sign=6A2561804E290210909454E69640EFFBAA3B94A5 --gpg-options="\-\-pinentry\-mode=loopback \-\-passphrase\-file passphrase_file \-\-batch" --suite stable --origin "Andrew Rowson" --bucket apt-growse-com promtail_*.deb
