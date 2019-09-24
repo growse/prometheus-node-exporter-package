@@ -3,6 +3,7 @@ dist: bionic
 go:
   - 1.13.x
 cache:
+  bundler: true
   directories:
     - $HOME/.cache/go-build
     - $HOME/gopath/pkg/mod
@@ -20,4 +21,4 @@ script:
 deploy:
   skip_cleanup: true
   provider: script
-  script: rvm all do gem install bundler && rvm all do bundle install && rvm all do exec deb-s3 upload --s3-region=eu-west-1 --sign=6A2561804E290210909454E69640EFFBAA3B94A5 --gpg-options="\-\-pinentry\-mode=loopback \-\-passphrase\-file passphrase_file \-\-batch" --suite stable --origin "Andrew Rowson" --bucket apt-growse-com promtail_*.deb
+  script: rvm use 2.6.3 do gem install bundler && rvm use 2.6.3 do bundle install && rvm use 2.6.3 do exec deb-s3 upload --s3-region=eu-west-1 --sign=6A2561804E290210909454E69640EFFBAA3B94A5 --gpg-options="\-\-pinentry\-mode=loopback \-\-passphrase\-file passphrase_file \-\-batch" --suite stable --origin "Andrew Rowson" --bucket apt-growse-com promtail_*.deb
