@@ -4,6 +4,7 @@ VERSION := v0.18.1
 APPDESCRIPTION := Exporter for machine metrics
 APPURL := https://github.com/prometheus/node_exporter
 ARCH := amd64 arm
+GO_BUILD_SOURCE := .
 
 # Setup
 BUILD_NUMBER ?= 0
@@ -37,7 +38,7 @@ $(APPHOME): $(GOPATH)
 	cd $(APPHOME) && git checkout $(VERSION)
 
 $(APPHOME)/dist/$(DEBNAME)_linux_%: $(APPHOME)
-	cd $(APPHOME) && GOOS=linux GOARCH=$* go build -o dist/$(DEBNAME)_linux_$* .
+	cd $(APPHOME) && GOOS=linux GOARCH=$* go build -o dist/$(DEBNAME)_linux_$* $(GO_BUILD_SOURCE)
 
 $(DEBNAME)_$(DEBVERSION)_%.deb: $(APPHOME)/dist/$(DEBNAME)_linux_%
 	bundle exec fpm -s dir -t deb -n $(DEBNAME) --description "$(APPDESCRIPTION)" --url $(APPURL) --deb-changelog $(APPHOME)/CHANGELOG.md --prefix / -a $(DEB_$*_ARCH) -v $(DEBVERSION) --deb-systemd prometheus-node-exporter.service --config-files /etc/default/prometheus-node-exporter prometheus-node-exporter.defaults=/etc/default/prometheus-node-exporter $<=/usr/sbin/node_exporter
