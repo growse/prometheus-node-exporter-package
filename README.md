@@ -7,5 +7,3 @@ deb http://apt.growse.com/ stable main
 ```
 
 More details are available on https://apt.growse.com/
-
-
