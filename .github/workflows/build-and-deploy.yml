@@ -1,5 +1,11 @@
 name: Build, package and deploy
-on: [push]
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
 
 jobs:
   build:
@@ -15,6 +21,35 @@ jobs:
         uses: actions/checkout@v1
       - name: Build
         run: make build
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v1
+        with:
+          name: dist
+          path: gopath/src/github.com/prometheus/node_exporter/dist
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v1
+        with:
+          name: changelog
+          path: gopath/src/github.com/prometheus/node_exporter/CHANGELOG.md
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+    if: github.event_name != 'pull_request'
+    needs: build
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v1
+      - name: Download site artifact
+        uses: actions/download-artifact@v1
+        with:
+          name: dist
+          path: gopath/src/github.com/prometheus/node_exporter/dist
+      - name: Download changelog artifact
+        uses: actions/download-artifact@v1
+        with:
+          name: changelog
+          path: gopath/src/github.com/prometheus/node_exporter
+
       - name: Set up Ruby 2.6
         uses: actions/setup-ruby@v1
         with:
@@ -27,8 +62,10 @@ jobs:
         uses: einaregilsson/build-number@v1
         with:
           token: ${{secrets.github_token}}
-      - name: Package
-        run: make package
+      - name: Make deb package
+        run: |
+          touch gopath/src/github.com/prometheus/node_exporter/dist/*
+          make package
       - name: Upload to S3 Apt repo
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
