@@ -3,7 +3,7 @@ APP_REMOTE := github.com/prometheus/node_exporter
 VERSION := v1.0.0
 APPDESCRIPTION := Exporter for machine metrics
 APPURL := https://github.com/prometheus/node_exporter
-ARCH := amd64 arm
+ARCH := amd64 arm arm64
 GO_BUILD_SOURCE := .
 
 # Setup
@@ -14,6 +14,7 @@ APPHOME := $(GOPATH)/src/$(APP_REMOTE)
 
 # Let's map from go architectures to deb architectures, because they're not the same!
 DEB_arm_ARCH := armhf
+DEB_arm64_ARCH := arm64
 DEB_amd64_ARCH := amd64
 
 # Version info for binaries
