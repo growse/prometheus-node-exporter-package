@@ -51,6 +51,7 @@ $(APPHOME)/dist/$(DEBNAME)_linux_%: $(APPHOME)
 	echo $(IMAGE_TAG) && \
 	cd $(APPHOME) && \
 	GOOS=linux GOARCH=$* go build $(DYN_GO_FLAGS) -o dist/$(DEBNAME)_linux_$* $(GO_BUILD_SOURCE)
+	upx $@
 
 $(DEBNAME)_$(DEBVERSION)_%.deb: $(APPHOME)/dist/$(DEBNAME)_linux_%
 	chmod +x $<
