@@ -1,6 +1,6 @@
 DEBNAME := prometheus-node-exporter
 APP_REMOTE := github.com/prometheus/node_exporter
-VERSION := v1.0.0
+VERSION := v1.0.1
 APPDESCRIPTION := Exporter for machine metrics
 APPURL := https://github.com/prometheus/node_exporter
 ARCH := amd64 arm arm64
