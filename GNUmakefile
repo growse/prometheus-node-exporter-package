@@ -23,7 +23,7 @@ GOARM := 7
 VPREFIX := github.com/prometheus/common/version
 
 GO_LDFLAGS = -s -w -X $(VPREFIX).Branch=$(GIT_BRANCH) -X $(VPREFIX).Version=$(IMAGE_TAG) -X $(VPREFIX).Revision=$(GIT_REVISION) -X $(VPREFIX).BuildUser=$(shell whoami)@$(shell hostname) -X $(VPREFIX).BuildDate=$(shell date -u +"%Y-%m-%dT%H:%M:%SZ")
-DYN_GO_FLAGS = -ldflags "$(GO_LDFLAGS)" -tags netgo -mod vendor
+DYN_GO_FLAGS = -ldflags "$(GO_LDFLAGS)" -tags netgo -mod=readonly
 
 .EXPORT_ALL_VARIABLES:
 
