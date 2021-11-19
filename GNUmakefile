@@ -1,6 +1,6 @@
 DEBNAME := prometheus-node-exporter
 APP_REMOTE := github.com/prometheus/node_exporter
-VERSION := v1.2.2
+VERSION := v1.3.0
 APPDESCRIPTION := Exporter for machine metrics
 APPURL := https://github.com/prometheus/node_exporter
 ARCH := amd64 arm arm64
@@ -19,7 +19,7 @@ DEB_amd64_ARCH := amd64
 
 # Version info for binaries
 CGO_ENABLED := 0
-GOARM := 7
+GOARM := 6
 VPREFIX := github.com/prometheus/common/version
 
 GO_LDFLAGS = -s -w -X $(VPREFIX).Branch=$(GIT_BRANCH) -X $(VPREFIX).Version=$(IMAGE_TAG) -X $(VPREFIX).Revision=$(GIT_REVISION) -X $(VPREFIX).BuildUser=$(shell whoami)@$(shell hostname) -X $(VPREFIX).BuildDate=$(shell date -u +"%Y-%m-%dT%H:%M:%SZ")
