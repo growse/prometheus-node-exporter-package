@@ -1,6 +1,6 @@
 DEBNAME := prometheus-node-exporter
 APP_REMOTE := github.com/prometheus/node_exporter
-VERSION := v1.3.0
+NODE_EXPORTER_VERSION := v1.3.0
 APPDESCRIPTION := Exporter for machine metrics
 APPURL := https://github.com/prometheus/node_exporter
 ARCH := amd64 arm arm64
@@ -8,7 +8,7 @@ GO_BUILD_SOURCE := .
 
 # Setup
 BUILD_NUMBER ?= 0
-DEBVERSION := $(VERSION:v%=%)-$(BUILD_NUMBER)
+DEBVERSION := $(NODE_EXPORTER_VERSION:v%=%)-$(BUILD_NUMBER)
 GOPATH := $(abspath gopath)
 APPHOME := $(GOPATH)/src/$(APP_REMOTE)
 
@@ -32,7 +32,7 @@ package: $(addsuffix .deb, $(addprefix $(DEBNAME)_$(DEBVERSION)_, $(foreach a, $
 
 .PHONY: build
 build: $(addprefix $(APPHOME)/dist/$(DEBNAME)_linux_, $(foreach a, $(ARCH), $(a)))
-
+\
 .PHONY: checkout
 checkout: $(APPHOME)
 
@@ -41,7 +41,7 @@ $(GOPATH):
 
 $(APPHOME): $(GOPATH)
 	git clone https://$(APP_REMOTE) $(APPHOME)
-	cd $(APPHOME) && git checkout $(VERSION)
+	cd $(APPHOME) && git checkout $(NODE_EXPORTER_VERSION)
 
 $(APPHOME)/dist/$(DEBNAME)_linux_%: $(APPHOME)
 	$(eval GIT_REVISION := $(shell cd $(APPHOME) && git rev-parse --short HEAD))
@@ -52,8 +52,27 @@ $(APPHOME)/dist/$(DEBNAME)_linux_%: $(APPHOME)
 	upx $@
 
 $(DEBNAME)_$(DEBVERSION)_%.deb: $(APPHOME)/dist/$(DEBNAME)_linux_%
-	chmod +x $<
-	bundle exec fpm -s dir -t deb --license Apache --deb-priority optional --maintainer github@growse.com --vendor https://prometheus.io/ -n $(DEBNAME) --description "$(APPDESCRIPTION)" --url $(APPURL) --deb-changelog $(APPHOME)/CHANGELOG.md --prefix / -a $(DEB_$*_ARCH) -v $(DEBVERSION) --deb-systemd prometheus-node-exporter.service --config-files /etc/default/prometheus-node-exporter prometheus-node-exporter.defaults=/etc/default/prometheus-node-exporter $<=/usr/sbin/node_exporter
+	bundle exec fpm \
+	-s dir \
+	-t deb \
+	--license Apache \
+	--deb-priority optional \
+	--deb-systemd-enable \
+	--deb-systemd-restart-after-upgrade \
+	--deb-systemd-auto-start \
+	--maintainer github@growse.com \
+	--vendor https://prometheus.io/ \
+	-n $(DEBNAME) \
+	--description "$(APPDESCRIPTION)" \
+	--url $(APPURL) \
+	--deb-changelog $(APPHOME)/CHANGELOG.md \
+	--prefix / \
+	-a $(DEB_$*_ARCH) \
+	-v $(DEBVERSION) \
+	--deb-systemd deb-scripts/prometheus-node-exporter.service \
+	--config-files /etc/default/prometheus-node-exporter \
+	deb-scripts/prometheus-node-exporter.defaults=/etc/default/prometheus-node-exporter \
+	$<=/usr/sbin/node_exporter
 
 .PHONY: clean
 clean:
