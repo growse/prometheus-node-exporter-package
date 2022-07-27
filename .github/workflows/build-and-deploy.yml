@@ -19,7 +19,7 @@ jobs:
           go-version: 1.16
         id: go
       - name: Check out code into the Go module directory
-        uses: actions/checkout@v1
+        uses: actions/checkout@v3
       - name: Build
         run: make build
       - name: Upload artifacts
@@ -39,7 +39,7 @@ jobs:
     needs: build
     steps:
       - name: Check out code
-        uses: actions/checkout@v1
+        uses: actions/checkout@v3
       - name: Download site artifact
         uses: actions/download-artifact@v1
         with:
