@@ -5,5 +5,13 @@
     ":rebaseStalePrs",
     ":disableDependencyDashboard"
   ],
-  "assignees": ["growse"]
+  "assignees": ["growse"],
+  "regexManagers": [
+    {
+      "fileMatch": ["^GNUmakefile$"],
+      "matchStrings": ["NODE_EXPORTER_VERSION := v(?<currentValue>.*?)"],
+      "depNameTemplate": "prometheus/node_exporter",
+      "datasourceTemplate": "github-releases"
+    }
+  ]
 }
