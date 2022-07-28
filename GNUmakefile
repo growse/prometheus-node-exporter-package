@@ -76,5 +76,6 @@ $(DEBNAME)_$(DEBVERSION)_%.deb: $(APPHOME)/dist/$(DEBNAME)_linux_%
 
 .PHONY: clean
 clean:
+	chmod -R +w gopath
 	rm -f *.deb
 	rm -rf $(GOPATH)
