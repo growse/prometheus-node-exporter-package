@@ -9,9 +9,9 @@
   "regexManagers": [
     {
       "fileMatch": ["^GNUmakefile$"],
-      "matchStrings": ["NODE_EXPORTER_VERSION := v(?<currentValue>.*?)"],
-      "depNameTemplate": "prometheus/node_exporter",
-      "datasourceTemplate": "github-releases"
+      "matchStrings": [
+        "# renovate: datasource=(?<datasource>.*?) depName=(?<depName>.*?)\\s.*?_VERSION := (?<currentValue>.*?)\\s"
+      ]
     }
   ]
 }
