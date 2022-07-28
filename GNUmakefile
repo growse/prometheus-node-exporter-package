@@ -41,7 +41,7 @@ $(GOPATH):
 	mkdir $(GOPATH)
 
 $(APPHOME): $(GOPATH)
-	git clone https://$(APP_REMOTE) $(APPHOME)
+	git clone --depth 1 --branch $(NODE_EXPORTER_VERSION) https://$(APP_REMOTE) $(APPHOME)
 	cd $(APPHOME) && git checkout $(NODE_EXPORTER_VERSION)
 
 $(APPHOME)/dist/$(DEBNAME)_linux_%: $(APPHOME)
@@ -53,7 +53,7 @@ $(APPHOME)/dist/$(DEBNAME)_linux_%: $(APPHOME)
 	upx $@
 
 $(DEBNAME)_$(DEBVERSION)_%.deb: $(APPHOME)/dist/$(DEBNAME)_linux_%
-	bundle exec fpm \
+	bundle exec fpm -f \
 	-s dir \
 	-t deb \
 	--license Apache \
