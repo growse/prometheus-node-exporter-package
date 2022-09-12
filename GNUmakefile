@@ -4,7 +4,8 @@ APP_REMOTE := github.com/prometheus/node_exporter
 NODE_EXPORTER_VERSION := v1.3.1
 APPDESCRIPTION := Exporter for machine metrics
 APPURL := https://github.com/prometheus/node_exporter
-ARCH := amd64 arm arm64
+ARCH := arm arm64 amd64
+DEB_ARCH := armhf arm64 amd64
 GO_BUILD_SOURCE := .
 
 # Setup
@@ -18,6 +19,10 @@ DEB_arm_ARCH := armhf
 DEB_arm64_ARCH := arm64
 DEB_amd64_ARCH := amd64
 
+GO_armhf_ARCH := arm
+GO_arm64_ARCH := arm64
+GO_amd64_ARCH := amd64
+
 # Version info for binaries
 CGO_ENABLED := 0
 GOARM := 6
@@ -29,11 +34,10 @@ DYN_GO_FLAGS = -ldflags "$(GO_LDFLAGS)" -tags netgo -mod=readonly
 .EXPORT_ALL_VARIABLES:
 
 .PHONY: package
-package: $(addsuffix .deb, $(addprefix $(DEBNAME)_$(DEBVERSION)_, $(foreach a, $(ARCH), $(a))))
+package: $(addsuffix .deb, $(addprefix $(DEBNAME)_$(DEBVERSION)_, $(foreach a, $(DEB_ARCH), $(a))))
 
-.PHONY: build
-build: $(addprefix $(APPHOME)/dist/$(DEBNAME)_linux_, $(foreach a, $(ARCH), $(a)))
-\
+
+
 .PHONY: checkout
 checkout: $(APPHOME)
 
@@ -44,15 +48,15 @@ $(APPHOME): $(GOPATH)
 	git clone --depth 1 --branch $(NODE_EXPORTER_VERSION) https://$(APP_REMOTE) $(APPHOME)
 	cd $(APPHOME) && git checkout $(NODE_EXPORTER_VERSION)
 
-$(APPHOME)/dist/$(DEBNAME)_linux_%: $(APPHOME)
+$(APPHOME)/dist/$(DEBNAME)_linux_%: $(APPHOME)	
 	$(eval GIT_REVISION := $(shell cd $(APPHOME) && git rev-parse --short HEAD))
 	$(eval GIT_BRANCH := $(shell cd $(APPHOME) && git rev-parse --abbrev-ref HEAD))
 	$(eval IMAGE_TAG := $(shell cd $(APPHOME) && git describe --exact-match))
 	cd $(APPHOME) && \
-	GOOS=linux GOARCH=$* go build $(DYN_GO_FLAGS) -o dist/$(DEBNAME)_linux_$* $(GO_BUILD_SOURCE)
+	GOOS=linux GOARCH=$(GO_$*_ARCH) go build $(DYN_GO_FLAGS) -o dist/$(DEBNAME)_linux_$* $(GO_BUILD_SOURCE)
 	upx $@
 
-$(DEBNAME)_$(DEBVERSION)_%.deb: $(APPHOME)/dist/$(DEBNAME)_linux_%
+$(DEBNAME)_$(DEBVERSION)_%.deb: $(APPHOME)/dist/$(DEBNAME)_linux_%	
 	bundle exec fpm -f \
 	-s dir \
 	-t deb \
@@ -62,6 +66,7 @@ $(DEBNAME)_$(DEBVERSION)_%.deb: $(APPHOME)/dist/$(DEBNAME)_linux_%
 	--deb-systemd-restart-after-upgrade \
 	--deb-systemd-auto-start \
 	--after-install=deb-scripts/after-install.sh \
+	--after-upgrade=deb-scripts/after-install.sh \
 	--after-remove=deb-scripts/after-remove.sh \
 	--depends adduser,systemd \
 	--maintainer github@growse.com \
@@ -71,7 +76,7 @@ $(DEBNAME)_$(DEBVERSION)_%.deb: $(APPHOME)/dist/$(DEBNAME)_linux_%
 	--url $(APPURL) \
 	--deb-changelog $(APPHOME)/CHANGELOG.md \
 	--prefix / \
-	-a $(DEB_$*_ARCH) \
+	-a $* \
 	-v $(DEBVERSION) \
 	--deb-systemd deb-scripts/prometheus-node-exporter.service \
 	--config-files /etc/default/prometheus-node-exporter \
