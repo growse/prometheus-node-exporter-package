@@ -2,7 +2,7 @@
 Description=Prometheus Node Exporter
 
 [Service]
-User=prometheus
+User=prometheus-node-exporter
 EnvironmentFile=/etc/default/prometheus-node-exporter
 ExecStart=/usr/sbin/node_exporter $OPTIONS
 

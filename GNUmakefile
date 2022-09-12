@@ -61,6 +61,9 @@ $(DEBNAME)_$(DEBVERSION)_%.deb: $(APPHOME)/dist/$(DEBNAME)_linux_%
 	--deb-systemd-enable \
 	--deb-systemd-restart-after-upgrade \
 	--deb-systemd-auto-start \
+	--after-install=deb-scripts/after-install.sh \
+	--after-remove=deb-scripts/after-remove.sh \
+	--depends adduser,systemd \
 	--maintainer github@growse.com \
 	--vendor https://prometheus.io/ \
 	-n $(DEBNAME) \
