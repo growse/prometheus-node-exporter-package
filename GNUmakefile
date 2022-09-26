@@ -1,7 +1,7 @@
 DEBNAME := prometheus-node-exporter
 APP_REMOTE := github.com/prometheus/node_exporter
 # renovate: datasource=github-releases depName=prometheus/node_exporter
-NODE_EXPORTER_VERSION := v1.3.1
+NODE_EXPORTER_VERSION := v1.4.0
 APPDESCRIPTION := Exporter for machine metrics
 APPURL := https://github.com/prometheus/node_exporter
 ARCH := arm arm64 amd64
