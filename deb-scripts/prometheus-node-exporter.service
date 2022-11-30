@@ -1,10 +1,11 @@
 [Unit]
 Description=Prometheus Node Exporter
+Requires=prometheus-node-exporter.socket
 
 [Service]
 User=prometheus-node-exporter
 EnvironmentFile=/etc/default/prometheus-node-exporter
-ExecStart=/usr/sbin/node_exporter $OPTIONS
+ExecStart=/usr/sbin/node_exporter --web.systemd-socket $OPTIONS
 
 [Install]
 WantedBy=multi-user.target

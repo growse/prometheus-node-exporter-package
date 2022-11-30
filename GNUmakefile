@@ -75,7 +75,11 @@ $(DEBNAME)_$(DEBVERSION)_%.deb: $(APPHOME)/dist/$(DEBNAME)_linux_%
 	-a $* \
 	-v $(DEBVERSION) \
 	--deb-systemd deb-scripts/prometheus-node-exporter.service \
+	--deb-systemd-auto-start \
+	--deb-systemd-enable \
+	--deb-systemd-restart-after-upgrade \
 	--config-files /etc/default/prometheus-node-exporter \
+	deb-scripts/prometheus-node-exporter.socket=/lib/systemd/system/prometheus-node-exporter.socket \
 	deb-scripts/prometheus-node-exporter.defaults=/etc/default/prometheus-node-exporter \
 	$<=/usr/sbin/node_exporter
 
