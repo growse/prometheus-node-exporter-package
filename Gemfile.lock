@@ -16,7 +16,7 @@ GEM
       stud
     insist (1.0.0)
     mustache (0.99.8)
-    pleaserun (0.0.33)
+    pleaserun (0.0.34)
       cabin (> 0)
       clamp
       dotenv (~> 2)
